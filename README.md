@@ -18,6 +18,7 @@ SSL非対応のWebサイトにアクセスする際、ブラウザに警告が�
 .
 ├── README.md                           # このファイル
 ├── REQUIREMENTS.md                     # 要求仕様書
+├── TECHNICAL_DETAILS.md                # 技術詳細ドキュメント（実行コマンド詳細）
 ├── ssl_setup.sh                        # SSL化メインスクリプト
 ├── backup_server.sh                    # バックアップスクリプト
 ├── restore_server.sh                   # 復元スクリプト
@@ -25,6 +26,15 @@ SSL非対応のWebサイトにアクセスする際、ブラウザに警告が�
 ├── 教育研修サイト_アクセス手順書.html     # 利用者向け案内（HTML版）
 └── 教育研修サイト_アクセス手順書.md       # 利用者向け案内（Markdown版）
 ```
+
+## ドキュメント
+
+| ドキュメント | 内容 |
+|-------------|------|
+| [README.md](README.md) | プロジェクト概要・クイックスタート |
+| [REQUIREMENTS.md](REQUIREMENTS.md) | 要求仕様書（機能要求・非機能要求） |
+| [TECHNICAL_DETAILS.md](TECHNICAL_DETAILS.md) | **技術詳細（実行コマンド・処理内容）** |
+| [さくらVPS_SSL化手順書.md](さくらVPS_SSL化手順書.md) | 手動作業用の詳細手順 |
 
 ## 動作要件
 
