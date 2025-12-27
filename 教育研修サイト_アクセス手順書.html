@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教育研修サイト アクセス手順書</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .notice-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1a73e8;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .notice-box h3 {
+            color: #1a73e8;
+            margin-bottom: 10px;
+        }
+
+        .toc {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toc h2 {
+            color: #1a73e8;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc > ul > li {
+            margin-bottom: 10px;
+        }
+
+        .toc a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .toc ul ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .toc ul ul li {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #1a73e8;
+            font-size: 24px;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .section h3 {
+            color: #333;
+            font-size: 20px;
+            margin: 25px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .steps {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .steps ol {
+            margin-left: 20px;
+        }
+
+        .steps li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+        }
+
+        .steps li strong {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* 警告画面のモックアップスタイル */
+        .browser-mock {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .browser-toolbar {
+            background: #f1f3f4;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+            margin-right: 15px;
+        }
+
+        .browser-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .browser-dots .red { background: #ff5f57; }
+        .browser-dots .yellow { background: #ffbd2e; }
+        .browser-dots .green { background: #28ca42; }
+
+        .browser-address {
+            flex: 1;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Chrome警告画面 */
+        .chrome-warning {
+            background: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .chrome-warning .warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #f44336;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .chrome-warning h2 {
+            color: #d32f2f;
+            border: none;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .chrome-warning p {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chrome-warning .btn-advanced {
+            color: #666;
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .chrome-warning .btn-proceed {
+            display: block;
+            margin: 15px auto 0;
+            color: #1a73e8;
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .click-indicator {
+            display: inline-block;
+            background: #ffeb3b;
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .arrow-indicator {
+            color: #f44336;
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        /* Edge警告画面 */
+        .edge-warning {
+            background: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .edge-warning .warning-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .edge-warning .warning-icon::before {
+            content: "!";
+            display: block;
+            width: 80px;
+            height: 70px;
+            background: #c00;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            margin: 0 auto;
+            line-height: 90px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .edge-warning h2 {
+            color: #c00;
+            border: none;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        /* Firefox警告画面 */
+        .firefox-warning {
+            background: #0c0c0d;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .firefox-warning .warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #ff9500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .firefox-warning .warning-icon::before {
+            content: "!";
+            color: #0c0c0d;
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .firefox-warning h2 {
+            color: #ff9500;
+            border: none;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .firefox-warning p {
+            color: #b1b1b3;
+            margin-bottom: 25px;
+        }
+
+        .firefox-warning .btn-advanced {
+            color: #b1b1b3;
+            background: none;
+            border: 1px solid #b1b1b3;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .firefox-warning .btn-proceed {
+            display: block;
+            margin: 15px auto 0;
+            color: #45a1ff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Safari警告画面 */
+        .safari-warning {
+            background: #f5f5f7;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .safari-warning .warning-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #ff3b30;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .safari-warning .warning-icon::before {
+            content: "!";
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .safari-warning h2 {
+            color: #1d1d1f;
+            border: none;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .safari-warning p {
+            color: #86868b;
+            margin-bottom: 25px;
+        }
+
+        .safari-warning .btn-advanced {
+            color: #007aff;
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* モバイル警告画面 */
+        .mobile-mock {
+            width: 280px;
+            margin: 20px auto;
+            border: 8px solid #333;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .mobile-notch {
+            background: #333;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 5px;
+        }
+
+        .mobile-notch-inner {
+            width: 100px;
+            height: 20px;
+            background: #333;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .mobile-content {
+            background: white;
+            min-height: 400px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .mobile-content h3 {
+            font-size: 18px;
+            color: #d32f2f;
+            border: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        .mobile-content p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .mobile-content .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .mobile-content .btn-primary {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .mobile-content .btn-link {
+            background: none;
+            color: #1a73e8;
+        }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item h4 {
+            color: #1a73e8;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .faq-item h4::before {
+            content: "Q. ";
+            font-weight: bold;
+        }
+
+        .faq-item p::before {
+            content: "A. ";
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        /* 連絡先 */
+        .contact-box {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .contact-box h3 {
+            color: #2e7d32;
+            border: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .contact-info span {
+            display: block;
+            margin: 5px 0;
+        }
+
+        /* 印刷用スタイル */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .section, .toc {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .browser-mock, .mobile-mock {
+                break-inside: avoid;
+            }
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 30px 15px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .section {
+                padding: 20px 15px;
+            }
+
+            .chrome-warning, .edge-warning, .firefox-warning, .safari-warning {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>教育研修サイト アクセス手順書</h1>
+            <p>SSL警告画面の対処方法について</p>
+        </header>
+
+        <div class="notice-box">
+            <h3>はじめにお読みください</h3>
+            <p>教育研修サイトにアクセスする際、ブラウザに「安全ではありません」「保護されていない通信」などの警告が表示される場合があります。</p>
+            <p>これはサイトがSSL（暗号化通信）に対応していないためですが、<strong>院内の教育研修サイトですので安全にアクセスいただけます</strong>。</p>
+            <p>以下の手順に従って、警告画面を通過してサイトにアクセスしてください。</p>
+        </div>
+
+        <nav class="toc">
+            <h2>目次</h2>
+            <ul>
+                <li><a href="#windows">1. Windows PC</a>
+                    <ul>
+                        <li><a href="#chrome">Google Chrome</a></li>
+                        <li><a href="#edge">Microsoft Edge</a></li>
+                        <li><a href="#firefox">Firefox</a></li>
+                    </ul>
+                </li>
+                <li><a href="#mac">2. Mac</a>
+                    <ul>
+                        <li><a href="#safari">Safari</a></li>
+                        <li><a href="#chrome-mac">Google Chrome</a></li>
+                        <li><a href="#firefox-mac">Firefox</a></li>
+                    </ul>
+                </li>
+                <li><a href="#iphone">3. iPhone / iPad</a></li>
+                <li><a href="#android">4. Android端末</a></li>
+                <li><a href="#faq">5. よくある質問</a></li>
+                <li><a href="#contact">6. お問い合わせ先</a></li>
+            </ul>
+        </nav>
+
+        <!-- Windows PC セクション -->
+        <section class="section" id="windows">
+            <h2>1. Windows PC</h2>
+
+            <h3 id="chrome">Google Chrome</h3>
+            <p>「この接続ではプライバシーが保護されません」と表示されます。</p>
+
+            <div class="browser-mock">
+                <div class="browser-toolbar">
+                    <div class="browser-dots">
+                        <span class="red"></span>
+                        <span class="yellow"></span>
+                        <span class="green"></span>
+                    </div>
+                    <div class="browser-address">🔓 保護されていない通信 | example-training.sakura.ne.jp</div>
+                </div>
+                <div class="chrome-warning">
+                    <div class="warning-icon">!</div>
+                    <h2>この接続ではプライバシーが保護されません</h2>
+                    <p>攻撃者が、example-training.sakura.ne.jp 上のあなたの情報（パスワード、メッセージ、クレジット カードなど）を不正に取得しようとしている可能性があります。</p>
+                    <button class="btn-advanced"><span class="arrow-indicator">→</span>詳細設定 <span class="click-indicator">1. ここをクリック</span></button>
+                    <button class="btn-proceed"><span class="arrow-indicator">→</span>example-training.sakura.ne.jp にアクセスする（安全ではありません） <span class="click-indicator">2. ここをクリック</span></button>
+                </div>
+            </div>
+
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細設定」</strong>をクリック</li>
+                    <li>画面下部に表示される<strong>「[サイト名]にアクセスする（安全ではありません）」</strong>をクリック</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+
+            <h3 id="edge">Microsoft Edge</h3>
+            <p>「接続がプライベートではありません」と表示されます。</p>
+
+            <div class="browser-mock">
+                <div class="browser-toolbar">
+                    <div class="browser-dots">
+                        <span class="red"></span>
+                        <span class="yellow"></span>
+                        <span class="green"></span>
+                    </div>
+                    <div class="browser-address">⚠️ example-training.sakura.ne.jp</div>
+                </div>
+                <div class="edge-warning">
+                    <div class="warning-icon"></div>
+                    <h2>接続がプライベートではありません</h2>
+                    <p style="color: #666; margin-bottom: 25px;">攻撃者が、example-training.sakura.ne.jp から個人情報を盗み取ろうとしている可能性があります。</p>
+                    <button style="color: #666; background: none; border: none; cursor: pointer;"><span class="arrow-indicator">→</span>詳細情報 <span class="click-indicator">1. ここをクリック</span></button>
+                    <button style="display: block; margin: 15px auto 0; color: #0078d4; background: none; border: none; cursor: pointer;"><span class="arrow-indicator">→</span>Web ページへ移動（非推奨） <span class="click-indicator">2. ここをクリック</span></button>
+                </div>
+            </div>
+
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細情報」</strong>をクリック</li>
+                    <li><strong>「Webページへ移動（非推奨）」</strong>をクリック</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+
+            <h3 id="firefox">Firefox</h3>
+            <p>「警告: 潜在的なセキュリティリスクあり」と表示されます。</p>
+
+            <div class="browser-mock">
+                <div class="browser-toolbar" style="background: #2b2b2b;">
+                    <div class="browser-dots">
+                        <span class="red"></span>
+                        <span class="yellow"></span>
+                        <span class="green"></span>
+                    </div>
+                    <div class="browser-address" style="background: #474749; color: #b1b1b3;">🔒 example-training.sakura.ne.jp</div>
+                </div>
+                <div class="firefox-warning">
+                    <div class="warning-icon"></div>
+                    <h2>警告: 潜在的なセキュリティリスクあり</h2>
+                    <p>Firefox はセキュリティ上の潜在的な脅威を検知したため、example-training.sakura.ne.jp への接続を中止しました。</p>
+                    <button class="btn-advanced"><span class="arrow-indicator" style="color: #ff9500;">→</span>詳細情報... <span class="click-indicator">1. ここをクリック</span></button>
+                    <button class="btn-proceed"><span class="arrow-indicator" style="color: #ff9500;">→</span>危険性を承知で続行 <span class="click-indicator">2. ここをクリック</span></button>
+                </div>
+            </div>
+
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細情報...」</strong>をクリック</li>
+                    <li><strong>「危険性を承知で続行」</strong>をクリック</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Mac セクション -->
+        <section class="section" id="mac">
+            <h2>2. Mac</h2>
+
+            <h3 id="safari">Safari</h3>
+            <p>「この接続はプライベートではありません」と表示されます。</p>
+
+            <div class="browser-mock">
+                <div class="browser-toolbar" style="background: #e8e8e8;">
+                    <div class="browser-dots">
+                        <span class="red"></span>
+                        <span class="yellow"></span>
+                        <span class="green"></span>
+                    </div>
+                    <div class="browser-address" style="background: #ffffff; border: 1px solid #ccc;">🔓 example-training.sakura.ne.jp</div>
+                </div>
+                <div class="safari-warning">
+                    <div class="warning-icon"></div>
+                    <h2>この接続はプライベートではありません</h2>
+                    <p>このWebサイトは、あなたの個人情報または金融情報を盗むために "example-training.sakura.ne.jp" になりすましている可能性があります。</p>
+                    <button class="safari-btn" style="background: #007aff; color: white; border: none; padding: 8px 20px; border-radius: 6px; margin-right: 10px; cursor: pointer;">戻る</button>
+                    <button class="btn-advanced"><span class="arrow-indicator" style="color: #007aff;">→</span>詳細を表示 <span class="click-indicator">1. ここをクリック</span></button>
+                    <p style="margin-top: 20px;">
+                        <button style="color: #007aff; background: none; border: none; cursor: pointer;"><span class="arrow-indicator" style="color: #007aff;">→</span>このWebサイトを閲覧 <span class="click-indicator">2. ここをクリック</span></button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細を表示」</strong>をクリック</li>
+                    <li><strong>「このWebサイトを閲覧」</strong>をクリック</li>
+                    <li>Macのパスワードを求められた場合は入力</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+
+            <h3 id="chrome-mac">Google Chrome (Mac)</h3>
+            <p>Windows版と同じ手順です。<a href="#chrome">上記Chrome手順</a>をご参照ください。</p>
+
+            <h3 id="firefox-mac">Firefox (Mac)</h3>
+            <p>Windows版と同じ手順です。<a href="#firefox">上記Firefox手順</a>をご参照ください。</p>
+        </section>
+
+        <!-- iPhone/iPad セクション -->
+        <section class="section" id="iphone">
+            <h2>3. iPhone / iPad</h2>
+
+            <h3>Safari (iOS)</h3>
+            <p>「接続はプライベートではありません」と表示されます。</p>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+                <div class="mobile-mock">
+                    <div class="mobile-notch">
+                        <div class="mobile-notch-inner"></div>
+                    </div>
+                    <div class="mobile-content">
+                        <div style="width: 50px; height: 50px; margin: 0 auto 15px; background: #ff3b30; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold;">!</div>
+                        <h3 style="color: #1d1d1f;">接続はプライベートではありません</h3>
+                        <p>このWebサイトは、あなたの個人情報を盗もうとしている可能性があります。</p>
+                        <button class="btn btn-primary">戻る</button>
+                        <button class="btn btn-link"><span class="arrow-indicator">→</span>詳細を表示 <span class="click-indicator">1</span></button>
+                    </div>
+                </div>
+
+                <div class="mobile-mock">
+                    <div class="mobile-notch">
+                        <div class="mobile-notch-inner"></div>
+                    </div>
+                    <div class="mobile-content">
+                        <div style="width: 50px; height: 50px; margin: 0 auto 15px; background: #ff3b30; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold;">!</div>
+                        <h3 style="color: #1d1d1f;">接続はプライベートではありません</h3>
+                        <p style="font-size: 12px;">このWebサイトの証明書は無効です。...</p>
+                        <button class="btn btn-primary">戻る</button>
+                        <button class="btn btn-link"><span class="arrow-indicator">→</span>このWebサイトを閲覧 <span class="click-indicator">2</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="steps">
+                <h4>操作手順 (Safari)</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細を表示」</strong>をタップ</li>
+                    <li><strong>「このWebサイトを閲覧」</strong>をタップ</li>
+                    <li>確認ダイアログが表示されたら<strong>「Webサイトを閲覧」</strong>をタップ</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+
+            <h3>Chrome (iOS)</h3>
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細設定」</strong>をタップ</li>
+                    <li><strong>「[サイト名]にアクセスする（安全ではありません）」</strong>をタップ</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Android セクション -->
+        <section class="section" id="android">
+            <h2>4. Android端末</h2>
+
+            <h3>Chrome (Android)</h3>
+            <p>「この接続ではプライバシーが保護されません」と表示されます。</p>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+                <div class="mobile-mock" style="border-radius: 15px; border-width: 6px;">
+                    <div style="background: #333; height: 20px;"></div>
+                    <div class="mobile-content" style="min-height: 380px;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 36px; font-weight: bold;">!</div>
+                        <h3>この接続ではプライバシーが保護されません</h3>
+                        <p style="font-size: 13px;">攻撃者があなたの情報を不正に取得しようとしている可能性があります。</p>
+                        <button class="btn btn-link" style="color: #666;"><span class="arrow-indicator">→</span>詳細設定 <span class="click-indicator">1</span></button>
+                    </div>
+                </div>
+
+                <div class="mobile-mock" style="border-radius: 15px; border-width: 6px;">
+                    <div style="background: #333; height: 20px;"></div>
+                    <div class="mobile-content" style="min-height: 380px;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 36px; font-weight: bold;">!</div>
+                        <h3>この接続ではプライバシーが保護されません</h3>
+                        <p style="font-size: 11px;">このサーバーが example-training... であることを確認できませんでした。</p>
+                        <button class="btn btn-link"><span class="arrow-indicator">→</span>サイトにアクセスする（安全ではありません） <span class="click-indicator" style="font-size: 10px;">2</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細設定」</strong>をタップ</li>
+                    <li>画面を下にスクロール</li>
+                    <li><strong>「[サイト名]にアクセスする（安全ではありません）」</strong>をタップ</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+            </div>
+
+            <h3>標準ブラウザ（Samsungインターネット等）</h3>
+            <div class="steps">
+                <h4>操作手順</h4>
+                <ol>
+                    <li>警告画面で<strong>「詳細」</strong>または<strong>「詳細を表示」</strong>をタップ</li>
+                    <li><strong>「続行」</strong>または<strong>「アクセスを続ける」</strong>をタップ</li>
+                    <li>サイトが表示されます</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 14px; color: #666;">※機種やブラウザのバージョンにより表示が異なる場合があります</p>
+            </div>
+        </section>
+
+        <!-- FAQ セクション -->
+        <section class="section" id="faq">
+            <h2>5. よくある質問</h2>
+
+            <div class="faq-item">
+                <h4>警告が出るサイトにアクセスしても大丈夫ですか？</h4>
+                <p>当院の教育研修サイトは院内システムとして管理されており、安全にご利用いただけます。警告は通信の暗号化がされていないことを示していますが、院内ネットワークまたはVPN経由でのアクセスであれば問題ありません。</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>「詳細設定」や「詳細を表示」のボタンが見つかりません</h4>
+                <p>画面をスクロールすると表示される場合があります。また、ブラウザのバージョンによっては表示位置や文言が異なることがあります。見つからない場合は、医療情報部までお問い合わせください。</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>毎回警告が表示されますか？</h4>
+                <p>ブラウザやデバイスによっては毎回表示される場合があります。一部のブラウザでは例外として登録することで、次回以降は警告なしでアクセスできます。</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>それでもアクセスできない場合は？</h4>
+                <p>以下をご確認ください：<br>
+                ・インターネット接続が正常か確認<br>
+                ・URLが正しいか確認<br>
+                ・ブラウザのキャッシュをクリアして再度アクセス<br>
+                ・別のブラウザで試してみる<br><br>
+                上記を試しても解決しない場合は、医療情報部までお問い合わせください。</p>
+            </div>
+        </section>
+
+        <!-- お問い合わせ セクション -->
+        <section class="section" id="contact">
+            <h2>6. お問い合わせ先</h2>
+            <div class="contact-box">
+                <h3>医療情報部</h3>
+                <div class="contact-info">
+                    <span>内線：XXXX</span>
+                    <span>メール：xxxxx@example.hospital.jp</span>
+                </div>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
+            <p>最終更新日：2024年12月</p>
+        </footer>
+    </div>
+</body>
+</html>
