@@ -10,7 +10,8 @@ SSL非対応のWebサイトにアクセスする際、ブラウザに警告が�
 
 1. **SSL化スクリプト** - Let's Encryptを使用した無料SSL証明書の自動取得・設定
 2. **バックアップ/復元スクリプト** - 作業前のバックアップと問題発生時の復元
-3. **利用者向けドキュメント** - SSL化完了までの暫定対応として、警告画面の回避方法
+3. **SSH公開鍵認証設定スクリプト** - パスワード認証から公開鍵認証への切り替え
+4. **利用者向けドキュメント** - SSL化完了までの暫定対応として、警告画面の回避方法
 
 ## ファイル構成
 
@@ -22,7 +23,9 @@ SSL非対応のWebサイトにアクセスする際、ブラウザに警告が�
 ├── ssl_setup.sh                        # SSL化メインスクリプト
 ├── backup_server.sh                    # バックアップスクリプト
 ├── restore_server.sh                   # 復元スクリプト
-├── さくらVPS_SSL化手順書.md              # 手動作業用の手順書
+├── ssh_setup.sh                        # SSH公開鍵認証設定スクリプト
+├── SSH公開鍵認証_設定手順書.md           # SSH設定の手動作業手順書
+├── さくらVPS_SSL化手順書.md              # SSL化の手動作業手順書
 ├── 教育研修サイト_アクセス手順書.html     # 利用者向け案内（HTML版）
 └── 教育研修サイト_アクセス手順書.md       # 利用者向け案内（Markdown版）
 ```
@@ -34,7 +37,8 @@ SSL非対応のWebサイトにアクセスする際、ブラウザに警告が�
 | [README.md](README.md) | プロジェクト概要・クイックスタート |
 | [REQUIREMENTS.md](REQUIREMENTS.md) | 要求仕様書（機能要求・非機能要求） |
 | [TECHNICAL_DETAILS.md](TECHNICAL_DETAILS.md) | **技術詳細（実行コマンド・処理内容）** |
-| [さくらVPS_SSL化手順書.md](さくらVPS_SSL化手順書.md) | 手動作業用の詳細手順 |
+| [さくらVPS_SSL化手順書.md](さくらVPS_SSL化手順書.md) | SSL化の手動作業手順 |
+| [SSH公開鍵認証_設定手順書.md](SSH公開鍵認証_設定手順書.md) | SSH設定の手動作業手順 |
 
 ## 動作要件
 
@@ -148,6 +152,36 @@ sudo ./restore_server.sh /root/ssl_backup/latest
 4. データベースのみ
 5. 個別選択
 
+### ssh_setup.sh
+
+SSHのパスワード認証を公開鍵認証に変更するスクリプトです。
+
+```bash
+sudo ./ssh_setup.sh
+```
+
+**前提条件：**
+- ローカルPCで鍵ペア（秘密鍵・公開鍵）を生成済み
+- 公開鍵をサーバーの `~/.ssh/authorized_keys` に登録済み
+- 公開鍵認証でSSHログインできることを確認済み
+
+**処理内容：**
+1. 事前確認（公開鍵登録の確認）
+2. 現在のSSH設定確認
+3. sshd_configのバックアップ
+4. 設定変更（パスワード認証無効化、公開鍵認証有効化）
+5. 設定ファイルの文法チェック
+6. SSHサービス再起動
+
+**変更される設定：**
+```
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+PubkeyAuthentication yes
+PermitEmptyPasswords no
+PermitRootLogin no  # オプション
+```
+
 ## 利用者向けドキュメント
 
 SSL化が完了するまでの間、利用者がSSL警告を回避してサイトにアクセスするための手順書です。
@@ -225,4 +259,5 @@ MIT License
 
 ## 更新履歴
 
+- 2024-12-29: SSH公開鍵認証設定スクリプト・手順書を追加
 - 2024-12-28: 初版作成

@@ -9,7 +9,8 @@
 1. [ssl_setup.sh - SSL化スクリプト](#1-ssl_setupsh---ssl化スクリプト)
 2. [backup_server.sh - バックアップスクリプト](#2-backup_serversh---バックアップスクリプト)
 3. [restore_server.sh - 復元スクリプト](#3-restore_serversh---復元スクリプト)
-4. [ファイル構成とパス一覧](#4-ファイル構成とパス一覧)
+4. [ssh_setup.sh - SSH公開鍵認証設定スクリプト](#4-ssh_setupsh---ssh公開鍵認証設定スクリプト)
+5. [ファイル構成とパス一覧](#5-ファイル構成とパス一覧)
 
 ---
 
@@ -583,9 +584,206 @@ systemctl is-active --quiet httpd
 
 ---
 
-## 4. ファイル構成とパス一覧
+## 4. ssh_setup.sh - SSH公開鍵認証設定スクリプト
 
-### 4.1 スクリプトが参照・変更するパス
+### 4.1 概要
+
+| 項目 | 内容 |
+|------|------|
+| 実行権限 | root（sudo） |
+| 対話形式 | あり（確認プロンプト） |
+| 所要時間 | 約5分 |
+| 前提条件 | 公開鍵認証でログインできることを事前確認 |
+
+### 4.2 処理フロー詳細
+
+#### Step 1: 事前確認
+
+スクリプト実行前に以下を確認するようユーザーに促します：
+
+1. ローカルPCで鍵ペアを生成済み
+2. 公開鍵をサーバーに登録済み
+3. 公開鍵認証でログイン可能
+
+#### Step 2: 現在のSSH設定を確認
+
+```bash
+# 現在の設定を表示
+grep -E "^(PasswordAuthentication|PubkeyAuthentication|PermitRootLogin|ChallengeResponseAuthentication)" /etc/ssh/sshd_config
+
+# authorized_keysの確認
+CURRENT_USER=$(logname 2>/dev/null || echo "$SUDO_USER")
+AUTH_KEYS="/home/${CURRENT_USER}/.ssh/authorized_keys"
+wc -l < "$AUTH_KEYS"  # 登録されている公開鍵の数
+```
+
+#### Step 3: 設定のバックアップ
+
+```bash
+SSHD_CONFIG="/etc/ssh/sshd_config"
+BACKUP_FILE="${SSHD_CONFIG}.backup.$(date +%Y%m%d_%H%M%S)"
+
+cp -p "$SSHD_CONFIG" "$BACKUP_FILE"
+```
+
+**バックアップファイル例：** `/etc/ssh/sshd_config.backup.20241228_150000`
+
+#### Step 4: 変更内容の確認
+
+ユーザーに変更内容を表示し、確認を求めます。
+
+#### Step 5: sshd_configを変更
+
+**変更する設定項目と実行コマンド：**
+
+```bash
+# PasswordAuthentication を no に変更
+sed -i 's/^PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+# または（コメントアウトされている場合）
+sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+# または（設定がない場合）
+echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+
+# ChallengeResponseAuthentication を no に変更
+sed -i 's/^ChallengeResponseAuthentication.*/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+
+# PubkeyAuthentication を yes に変更
+sed -i 's/^PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+
+# PermitEmptyPasswords を no に変更
+sed -i 's/^PermitEmptyPasswords.*/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+
+# PermitRootLogin を no に変更（オプション）
+sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+```
+
+**変更後の設定値：**
+
+| 設定項目 | 変更後の値 | 説明 |
+|---------|-----------|------|
+| `PasswordAuthentication` | no | パスワード認証を無効化 |
+| `ChallengeResponseAuthentication` | no | チャレンジレスポンス認証を無効化 |
+| `PubkeyAuthentication` | yes | 公開鍵認証を有効化 |
+| `PermitEmptyPasswords` | no | 空パスワードを禁止 |
+| `PermitRootLogin` | no | rootログインを禁止（オプション） |
+
+#### Step 6: 設定ファイルの文法チェック
+
+```bash
+sshd -t
+```
+
+エラーがある場合はバックアップから復元：
+```bash
+cp -p "$BACKUP_FILE" /etc/ssh/sshd_config
+```
+
+#### Step 7: SSHサービスの再起動
+
+```bash
+# CentOS / Rocky Linux / AlmaLinux
+systemctl restart sshd
+
+# Ubuntu / Debian
+systemctl restart ssh
+
+# 起動確認
+systemctl is-active --quiet sshd
+# または
+systemctl is-active --quiet ssh
+```
+
+### 4.3 ローカルPCでの鍵生成コマンド
+
+**Ed25519形式（推奨）：**
+```bash
+ssh-keygen -t ed25519 -C "your-email@example.com"
+```
+
+**RSA 4096bit形式：**
+```bash
+ssh-keygen -t rsa -b 4096 -C "your-email@example.com"
+```
+
+**オプションの説明：**
+
+| オプション | 説明 |
+|-----------|------|
+| `-t` | 鍵の種類（ed25519, rsa, ecdsa, dsa） |
+| `-b` | 鍵のビット長（RSAの場合） |
+| `-C` | コメント（識別用） |
+
+**生成されるファイル：**
+
+| ファイル | 説明 |
+|---------|------|
+| `~/.ssh/id_ed25519` | 秘密鍵（絶対に漏洩させない） |
+| `~/.ssh/id_ed25519.pub` | 公開鍵（サーバーに登録） |
+
+### 4.4 公開鍵のサーバー登録コマンド
+
+**ssh-copy-id を使用（推奨）：**
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub ユーザー名@サーバーIP
+```
+
+**手動で登録：**
+```bash
+# サーバー側で実行
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+echo "公開鍵の内容" >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+```
+
+### 4.5 必要なパーミッション
+
+| パス | パーミッション | 説明 |
+|------|--------------|------|
+| `~/.ssh/` | 700 (drwx------) | SSHディレクトリ |
+| `~/.ssh/authorized_keys` | 600 (-rw-------) | 公開鍵ファイル |
+| `~/.ssh/id_ed25519` | 600 (-rw-------) | 秘密鍵 |
+| `~/.ssh/id_ed25519.pub` | 644 (-rw-r--r--) | 公開鍵 |
+| `~/.ssh/config` | 600 (-rw-------) | SSH設定ファイル |
+
+### 4.6 設定確認コマンド
+
+**公開鍵認証でログイン：**
+```bash
+ssh ユーザー名@サーバーIP
+```
+
+**パスワード認証が無効か確認：**
+```bash
+ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no ユーザー名@サーバーIP
+# → "Permission denied (publickey)." と表示されれば成功
+```
+
+**詳細ログでデバッグ：**
+```bash
+ssh -v ユーザー名@サーバーIP
+```
+
+### 4.7 トラブル時の復元
+
+**バックアップから復元：**
+```bash
+sudo cp /etc/ssh/sshd_config.backup.YYYYMMDD_HHMMSS /etc/ssh/sshd_config
+sudo systemctl restart sshd
+```
+
+**さくらVPS VNCコンソールからの復元：**
+1. さくらVPSコントロールパネルにログイン
+2. 対象サーバーを選択
+3. 「コンソール」→「VNCコンソール」を開く
+4. サーバーに直接ログイン
+5. 上記の復元コマンドを実行
+
+---
+
+## 5. ファイル構成とパス一覧
+
+### 5.1 スクリプトが参照・変更するパス
 
 #### システムパス
 
@@ -599,6 +797,8 @@ systemctl is-active --quiet httpd
 | `/etc/ufw/` | ufw設定 | バックアップ/変更 |
 | `/etc/hosts` | hostsファイル | バックアップ |
 | `/etc/cron.d/certbot` | Certbot自動更新cron | 確認 |
+| `/etc/ssh/sshd_config` | SSH設定ファイル | バックアップ/変更 |
+| `~/.ssh/authorized_keys` | SSH公開鍵 | 確認/登録 |
 
 #### アプリケーションパス
 
